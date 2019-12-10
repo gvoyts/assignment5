@@ -3,10 +3,12 @@ var express = require("express")
 var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
+var cors = require("cors");
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // Server port
 var HTTP_PORT = 8000 
@@ -50,6 +52,8 @@ app.get("/api/user/:id", (req, res, next) => {
 });
 
 app.post("/api/user/", (req, res, next) => {
+    console.log("post recdeived");
+    console.log(req.body);
     var errors=[]
     if (!req.body.password){
         errors.push("No password specified");
