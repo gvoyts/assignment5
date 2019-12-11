@@ -127,18 +127,25 @@ app.delete("/api/user/:id", (req, res, next) => {
 })
 
 app.get("/flowers", (req, res, next) => {
-    var sql = "select * from flowers"
-    var params = []
-    flowers.all(sql, params, (err, rows) => {
-        if (err) {
-          res.status(400).json({"error":err.message});
-          return;
-        }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+    flowers.all("select distinct comname as name from flowers", (err, rows) => {
+        console.log(rows);
+        const allsightings = rows.map(e => e.name);
+        console.log(allsightings);
+        res.send(allsightings);
       });
+    // var sql = "select distinct comname as name from flowers"
+    // var params = []
+    // flowers.all(sql, params, (err, rows) => {
+    //     if (err) {
+    //       res.status(400).json({"error":err.message});
+    //       return;
+    //     }
+    //     res.json({
+    //         "message":"success",
+    //         "data":rows
+    //     })
+    //   });
+    //   console.log(res);
 });
 
 // Insert here other API endpoints
