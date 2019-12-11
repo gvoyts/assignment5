@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-import FlowersTable from './FlowersTable';
+//import FlowersTable from './FlowersTable';
 import axios from "axios";
 import ThemeSwitcher from "./ThemeSwitcher";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -49,16 +49,18 @@ componentWillMount() {
     this.getFlowers();
     //console.log(this.state.flowers);
 }
-
+//can reference each element by using [] notation on this.state.flowers - maybe use this to make buttons for each entry???
   render(){
-  return (
-    <div className="App">
-      
-      <FlowersTable flowers={this.state.flowers}></FlowersTable>
-      <ThemeSwitcher></ThemeSwitcher>
+    return (
+  <div className="App">
+    <div class="col-sm-4">
+      <p className="App-intro">{this.state.flowers}</p> 
     </div>
-  );
-}
+
+    <div class="col-sm-8">column 2</div>
+ </div>
+    );
+  }
 }
 //<ThemeSwitcher></ThemeSwitcher>
 //<p className="App-intro">{this.state.apiResponse}</p>
