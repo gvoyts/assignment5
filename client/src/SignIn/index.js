@@ -32,11 +32,12 @@ class SignIn extends Component {
 
       signIn() {
         try {
-            //sign in here
+            //sign in
       console.log('Signed in');
     } catch (error) {
       console.error('Error:', error);
       }
+    }
 
       addUser() {
         try {

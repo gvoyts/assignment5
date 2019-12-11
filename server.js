@@ -3,6 +3,7 @@
 var express = require("express")
 var app = express()
 var db = require("./database.js")
+var flowers = require('./flowersDB.js')
 var md5 = require("md5")
 var cors = require("cors");
 
@@ -124,6 +125,21 @@ app.delete("/api/user/:id", (req, res, next) => {
             res.json({"message":"deleted", changes: this.changes})
     });
 })
+
+app.get("/flowers", (req, res, next) => {
+    var sql = "select * from flowers"
+    var params = []
+    flowers.all(sql, params, (err, rows) => {
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+      });
+});
 
 // Insert here other API endpoints
 

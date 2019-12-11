@@ -10,10 +10,11 @@ class App extends Component {
 }
 
 callAPI() {
-    fetch("http://localhost:8000/api/users")
+    fetch("http://localhost:8000/flowers") //just changed this from /api/users
         .then(res => res.text())
         .then(res => this.setState({ apiResponse: res }));
 }
+
 
 componentWillMount() {
     this.callAPI();
