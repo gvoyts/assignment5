@@ -141,11 +141,17 @@ app.get("/flowers", (req, res, next) => {
       });
 });
 
-//
+app.get("/sightings/:name", (req, res, next) => {
+
+
+});
+
+
 app.get("/sightings", (req, res, next) => {
     // replace Draperia with the input from the user about which flower they want sightings information on
-    var sql = "select * from sightings s WHERE s.name = 'Draperia' ORDER BY s.sighted DESC LIMIT 3" // will eb a problem if not in date order? sort by?
-    var params = []
+    var sql = "select * from sightings s WHERE s.name = ? ORDER BY s.sighted DESC LIMIT 10" // will eb a problem if not in date order? sort by?
+    var params = 'Draperia'; //[req.body.name]
+    console.log("sightings/name has been used");
     flowers.all(sql, params, (err, rows) => {
         rows.forEach((row) => {
             console.log(row);
@@ -154,10 +160,11 @@ app.get("/sightings", (req, res, next) => {
           res.status(400).json({"error":err.message});
           return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        // res.json({
+        //     "message":"success",
+        //     "data":rows
+        // })
+        res.send(rows);
       });
 });
 
@@ -167,9 +174,19 @@ app.post("/flowers", (req, res, next) => {
     var errors=[]   
     // will be set to question marks after to take in user input from front end
     // needs to be tested 
-    var sql ='INSERT INTO flowers (genus, species, comname) VALUES (‘nancy’,’ganna’,’matthieu’)';
+    
     // [req.param.genus, req.param.species, req.param.comname]; // have hardcode for testing purposes then change to user input after
-    db.run(sql, params, function (err, result) {
+    var data = {
+        name: "req.body.name,",
+        person: "mm",
+        location: "nn",
+        sighted: "date"
+    }
+
+    var sql ='INSERT INTO sightings (name, person, location, sighted) VALUES (?,?,?,?)';
+    var params = [data.name, data.person, data.locationm, data.sighted];
+
+    flowers.run(sql, params, function (err, result) {
             if (err){
                 res.status(400).json({"error": err.message})
                 return;
@@ -189,10 +206,16 @@ app.post("/flowers", (req, res, next) => {
         var errors=[]   
         // will be set to question marks after to take in user input from front end
         // needs to be tested 
-        var sql = 'UPDATE flowers set genus = [?, genus], species = [?, species], comname = [?, comname]';
-        [req.param.genus, req.param.species, req.param.comname];
+     
+        var data = { 
+            genus: "A",
+            species: "B",
+            comname: "death camas" //req.body.comname
+        }
+        var sql = 'UPDATE flowers set genus = ?, species = ? WHERE comname LIKE ?';
+        var params = [data.genus, data.species, data.comname];
 
-        db.run(sql, params, function (err, result) {
+        flowers.run(sql, params, function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
                     return;
