@@ -160,6 +160,51 @@ app.get("/sightings", (req, res, next) => {
         })
       });
 });
+
+app.post("/flowers", (req, res, next) => {
+    console.log("post received");
+    console.log(req.body);
+    var errors=[]   
+    // will be set to question marks after to take in user input from front end
+    // needs to be tested 
+    var sql ='INSERT INTO flowers (genus, species, comname) VALUES (‘nancy’,’ganna’,’matthieu’)';
+    // [req.param.genus, req.param.species, req.param.comname]; // have hardcode for testing purposes then change to user input after
+    db.run(sql, params, function (err, result) {
+            if (err){
+                res.status(400).json({"error": err.message})
+                return;
+            }
+            res.json({
+                "message": "success",
+                "data": data,
+                "id" : this.lastID
+            })
+        });
+    });
+
+    // update flowers table, not tested
+    app.patch("/flowers", (req, res, next) => {
+        console.log("patch received");
+        console.log(req.body);
+        var errors=[]   
+        // will be set to question marks after to take in user input from front end
+        // needs to be tested 
+        var sql = 'UPDATE flowers set genus = [?, genus], species = [?, species], comname = [?, comname]';
+        [req.param.genus, req.param.species, req.param.comname];
+
+        db.run(sql, params, function (err, result) {
+                if (err){
+                    res.status(400).json({"error": err.message})
+                    return;
+                }
+                res.json({
+                    "message": "success",
+                    "data": data,
+                    "id" : this.lastID
+                })
+            });
+        });
+
 // Insert here other API endpoints
 
 // Default response for any other request
