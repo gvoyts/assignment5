@@ -141,6 +141,25 @@ app.get("/flowers", (req, res, next) => {
       });
 });
 
+//
+app.get("/sightings", (req, res, next) => {
+    // replace Draperia with the input from the user about which flower they want sightings information on
+    var sql = "select * from sightings s WHERE s.name = 'Draperia' ORDER BY s.sighted DESC LIMIT 3" // will eb a problem if not in date order? sort by?
+    var params = []
+    flowers.all(sql, params, (err, rows) => {
+        rows.forEach((row) => {
+            console.log(row);
+          });
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+      });
+});
 // Insert here other API endpoints
 
 // Default response for any other request
