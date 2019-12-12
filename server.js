@@ -127,11 +127,11 @@ app.delete("/api/user/:id", (req, res, next) => {
 })
 
 app.get("/flowers", (req, res, next) => {
-    flowers.all("select distinct comname as name from flowers", (err, rows) => {
-        console.log(rows);
-        const allsightings = rows.map(e => e.name);
-        console.log(allsightings);
-        res.send(allsightings);
+    flowers.all("select * from flowers", (err, rows) => {
+        //console.log(rows);
+        //const allsightings = rows.map(e => e.name);
+        //console.log();
+        res.send(rows);
       });
     // var sql = "select distinct comname as name from flowers"
     // var params = []
@@ -164,7 +164,7 @@ app.post("/sightings", (req, res, next) => {
     console.log("sightings/name has been used");
     flowers.all( sql, {$flower: flowerName}, (err, rows) => {
         console.log("test");
-        console.log(rows);
+        //console.log(rows);
         if (rows.length > 0) {
           res.send(rows);
         } else {
@@ -187,39 +187,51 @@ app.post("/sightings", (req, res, next) => {
       });
 });
 
-app.post("/flowers", (req, res, next) => {
+app.post("/insertSightings", (req, res, next) => {
     console.log("post received");
     console.log(req.body);
     var errors=[]   
+    const sname = req.body.name;
+    const sperson = req.body.person;
+    const slocation = req.body.location;
+    const ssighted = req.body.sighted;
     // will be set to question marks after to take in user input from front end
     // needs to be tested 
     
     // [req.param.genus, req.param.species, req.param.comname]; // have hardcode for testing purposes then change to user input after
     var data = {
-        name: "req.body.name,",
-        person: "mm",
-        location: "nn",
-        sighted: "date"
+        $name: sname,
+        $person: sperson,
+        $location: slocation,
+        $sighted: ssighted
     }
 
-    var sql ='INSERT INTO sightings (name, person, location, sighted) VALUES (?,?,?,?)';
-    var params = [data.name, data.person, data.locationm, data.sighted];
+    var sql ='INSERT INTO sightings (name, person, location, sighted) VALUES ($name,$person,$location,$sighted)';
+    //var params = [data.name, data.person, data.location, data.sighted];
 
-    flowers.run(sql, params, function (err, result) {
-            if (err){
-                res.status(400).json({"error": err.message})
-                return;
-            }
-            res.json({
-                "message": "success",
-                "data": data,
-                "id" : this.lastID
-            })
+    flowers.all(sql, data, function (err, result) {
+            // if (err){
+            //     res.status(400).json({"error": err.message})
+            //     return;
+            // }
+            // res.json({
+            //     "message": "success",
+            //     "data": data,
+            //     "id" : this.lastID
+            // })
+            console.log("inserted sighting: ");
+            //console.log(rows);
         });
     });
 
     // update flowers table, not tested
-    app.patch("/flowers", (req, res, next) => {
+    app.post("/updateFlowers", (req, res, next) => {
+        console.log(req.body);
+
+        const fgenus = req.body.genus;
+        const fspecies = req.body.species;
+        const fcomname = req.body.comname;
+
         console.log("patch received");
         console.log(req.body);
         var errors=[]   
@@ -227,23 +239,17 @@ app.post("/flowers", (req, res, next) => {
         // needs to be tested 
      
         var data = { 
-            genus: "A",
-            species: "B",
-            comname: "death camas" //req.body.comname
+            $genus: fgenus,
+            $species: fspecies,
+            $comname: fcomname //req.body.comname
         }
-        var sql = 'UPDATE flowers set genus = ?, species = ? WHERE comname LIKE ?';
-        var params = [data.genus, data.species, data.comname];
+        console.log('FLOWERA PLSFASDKHGEWJAK');
+        var sql = 'UPDATE flowers set genus = $genus, species = $species WHERE comname = $comname';
+        //var params = [data.genus, data.species, data.comname];
 
-        flowers.run(sql, params, function (err, result) {
-                if (err){
-                    res.status(400).json({"error": err.message})
-                    return;
-                }
-                res.json({
-                    "message": "success",
-                    "data": data,
-                    "id" : this.lastID
-                })
+        flowers.all(sql, data, function (err, result) {
+            console.log("updated flower: ");
+            console.log(data);
             });
         });
 

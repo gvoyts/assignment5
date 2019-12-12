@@ -21,11 +21,11 @@ class App extends Component {
     this.state = { apiResponse: "",
 
   flowers: [],
-                  sightings: []
+  sightings: [],
 genus: "",
 species: "",
-comname: "",
-s_flower: "",
+comname: "Alpine columbine",
+s_flower: "Alpine columbine",
 s_person: "",
 s_location: "",
 s_date: ""};
@@ -41,8 +41,9 @@ s_date: ""};
   this.handleChangeS_date = this.handleChangeS_date.bind(this);
   this.handleSubmitSightings = this.handleSubmitSightings.bind(this);
     
-    this.showSightings=this.showSightings.bind(this);
-
+  this.showSightings=this.showSightings.bind(this);
+  this.insertSighting=this.insertSighting.bind(this);
+  this.updateFlower=this.updateFlower.bind(this);
 }
 
 componentDidMount() {
@@ -61,6 +62,7 @@ handleChangeComname(event) {
 
 handleSubmit(event) {
   alert('A name was submitted: ' + this.state.genus + ' ' + this.state.species + '' + this.state.comname);
+  this.updateFlower(this.state.genus, this.state.species, this.state.comname);
   //this.addUser();
   event.preventDefault();
 }
@@ -81,6 +83,7 @@ handleChangeS_date(event) {
 handleSubmitSightings(event) {
   alert('A name was submitted: ' + this.state.s_flower + ' ' + this.state.s_person + '' + this.state.s_location + '' + this.state.s_date);
   //this.addUser();
+  this.insertSighting(this.state.s_flower, this.state.s_person, this.state.s_location, this.state.s_date);
   event.preventDefault();
 }
 
@@ -127,9 +130,28 @@ alert('A name ' + name + ' ' + d);
 
 }
 
+insertSighting(name, person, location, sighted){
+const d = axios.post("http://localhost:8000/insertSightings", { name: name, person: person, location: location, sighted: sighted}).then(res => {
+  console.log(res.data);
+
+})
+//alert('A name ' + name + ' ' + d);
+
+}
+
+updateFlower(genus, species, comname){
+  const d = axios.post("http://localhost:8000/updateFlowers", { genus: genus, species: species, comname: comname}).then(res => {
+    console.log(res.data);
+  
+  })
+  this.getFlowers();
+}
+
+
+
 
   
-}
+
 
 //can reference each element by using [] notation on this.state.flowers - maybe use this to make buttons for each entry???
   render(){
@@ -139,8 +161,10 @@ alert('A name ' + name + ' ' + d);
 
     const flowersq = data.map(names => {
       return(
-        <tr onClick ={() => this.showSightings(names)}>
-          <td>{names}</td>
+        <tr onClick ={() => this.showSightings(names.COMNAME)}>
+          <td>{names.GENUS}</td>
+          <td>{names.SPECIES}</td>
+          <td>{names.COMNAME}</td>
         </tr>
       );
     });
@@ -173,7 +197,7 @@ alert('A name ' + name + ' ' + d);
             <p>update info</p>
             <Col>
               <label>   
-                <select value={this.state.comname} onChange={this.handleChangeComname}>{data.map((x,y) => <option key={y}>{x}</option>)}</select>
+                <select value={this.state.comname} onChange={this.handleChangeComname}>{data.map((x,y) => <option key={y.COMNAME}>{x.COMNAME}</option>)}</select>
               </label>
             </Col>
             <Col>
@@ -196,7 +220,7 @@ alert('A name ' + name + ' ' + d);
             <p>sightings</p>
             <Col>
               <label>   
-                <select value={this.state.s_flower} onChange={this.handleChangeS_flower}>{data.map((x,y) => <option key={y}>{x}</option>)}</select>
+                <select value={this.state.s_flower} onChange={this.handleChangeS_flower}>{data.map((x,y) => <option key={y.COMNAME}>{x.COMNAME}</option>)}</select>
               </label>
             </Col>
             <Col>
@@ -220,17 +244,20 @@ alert('A name ' + name + ' ' + d);
           </Row>
             <input type="submit" value="Submit" />
         </form>
-      </Col>
+        <Row><Col>
 
-      <Table>
-          <thead>
-            <th>sighted</th>
-          </thead>
-          <tbody><tr>{sightingsq}</tr></tbody>
-        </Table>
-        </Col>
+<Table>
+    <thead>
+      <th>sighted</th>
+    </thead>
+    <tbody><tr>{sightingsq}</tr></tbody>
+  </Table>
+  </Col></Row>
+      </Col>
+      
 
     </Row>
+    
   </Container>
     );
   }
