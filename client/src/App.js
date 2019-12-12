@@ -13,15 +13,70 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = { apiResponse: "",
-  flowers: [] };
+  flowers: [],
+genus: "",
+species: "",
+comname: "",
+s_flower: "",
+s_person: "",
+s_location: "",
+s_date: ""};
+  
+  this.handleChangeGenus = this.handleChangeGenus.bind(this);
+  this.handleChangeSpecies = this.handleChangeSpecies.bind(this);
+  this.handleChangeComname = this.handleChangeComname.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+
+  this.handleChangeS_flower = this.handleChangeS_flower.bind(this);
+  this.handleChangeS_person = this.handleChangeS_person.bind(this);
+  this.handleChangeS_location = this.handleChangeS_location.bind(this);
+  this.handleChangeS_date = this.handleChangeS_date.bind(this);
+  this.handleSubmitSightings = this.handleSubmitSightings.bind(this);
 }
 
 componentDidMount() {
+}
+
+handleChangeGenus(event) {
+  this.setState({genus: event.target.value});
+}
+
+handleChangeSpecies(event) {
+  this.setState({species: event.target.value});
+}
+handleChangeComname(event) {
+  this.setState({comname: event.target.value});
+}
+
+handleSubmit(event) {
+  alert('A name was submitted: ' + this.state.genus + ' ' + this.state.species + '' + this.state.comname);
+  //this.addUser();
+  event.preventDefault();
+}
+
+handleChangeS_flower(event) {
+  this.setState({s_flower: event.target.value});
+}
+handleChangeS_person(event) {
+  this.setState({s_person: event.target.value});
+}
+handleChangeS_location(event) {
+  this.setState({s_location: event.target.value});
+}
+handleChangeS_date(event) {
+  this.setState({s_date: event.target.value});
+}
+
+handleSubmitSightings(event) {
+  alert('A name was submitted: ' + this.state.s_flower + ' ' + this.state.s_person + '' + this.state.s_location + '' + this.state.s_date);
+  //this.addUser();
+  event.preventDefault();
 }
 
 callAPI() {
@@ -76,7 +131,60 @@ componentWillMount() {
           <tbody><tr>{flowersq}</tr></tbody>
         </Table>
       </Col>
-      <Col>{this.state.flowers}</Col>
+      <Col>
+        <form onSubmit={this.handleSubmit}>
+          <Row>
+            <p>update info</p>
+            <Col>
+              <label>   
+                <select value={this.state.comname} onChange={this.handleChangeComname}>{data.map((x,y) => <option key={y}>{x}</option>)}</select>
+              </label>
+            </Col>
+            <Col>
+              <label>
+                New genus:
+                <input type="text" name="genus" value={this.state.genus} onChange={this.handleChangeGenus} />
+              </label>
+            </Col>
+            <Col>
+              <label>
+                New species:
+                <input type="text" name="species" value={this.state.species} onChange={this.handleChangeSpecies} />
+              </label>
+            </Col>
+          </Row>
+            <input type="submit" value="Submit" />
+        </form>
+        <form onSubmit={this.handleSubmitSightings}>
+          <Row>
+            <p>sightings</p>
+            <Col>
+              <label>   
+                <select value={this.state.s_flower} onChange={this.handleChangeS_flower}>{data.map((x,y) => <option key={y}>{x}</option>)}</select>
+              </label>
+            </Col>
+            <Col>
+              <label>
+                New person:
+                <input type="text" name="s_person" value={this.state.s_person} onChange={this.handleChangeS_person} />
+              </label>
+            </Col>
+            <Col>
+              <label>
+                New loc:
+                <input type="text" name="s_location" value={this.state.s_location} onChange={this.handleChangeS_location} />
+              </label>
+            </Col>
+            <Col>
+              <label>
+                New date:
+                <input type="text" name="s_date" value={this.state.s_date} onChange={this.handleChangeS_date} />
+              </label>
+            </Col>
+          </Row>
+            <input type="submit" value="Submit" />
+        </form>
+      </Col>
     </Row>
   </Container>
     );
