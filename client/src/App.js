@@ -19,7 +19,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { apiResponse: "",
+
   flowers: [],
+                  sightings: []
 genus: "",
 species: "",
 comname: "",
@@ -38,6 +40,9 @@ s_date: ""};
   this.handleChangeS_location = this.handleChangeS_location.bind(this);
   this.handleChangeS_date = this.handleChangeS_date.bind(this);
   this.handleSubmitSightings = this.handleSubmitSightings.bind(this);
+    
+    this.showSightings=this.showSightings.bind(this);
+
 }
 
 componentDidMount() {
@@ -102,21 +107,51 @@ getFlowers(){
     });
     }
 
-
 componentWillMount() {
     this.callAPI();
     this.getFlowers();
     
     //console.log(this.state.flowers);
 }
+
+showSightings(name) {
+  const d = axios.post("http://localhost:8000/sightings", { flower: name }).then(res => {
+    console.log(res.data);
+    this.setState({
+      sightings: res.data
+     // currName: res.data[0].NAME
+    });
+
+})
+alert('A name ' + name + ' ' + d);
+
+}
+
+
+  
+}
+
 //can reference each element by using [] notation on this.state.flowers - maybe use this to make buttons for each entry???
   render(){
     const data = this.state.flowers;
+    const data2 = this.state.sightings;
+    console.log("This is data two: "+ data2);
 
     const flowersq = data.map(names => {
       return(
-        <tr>
+        <tr onClick ={() => this.showSightings(names)}>
           <td>{names}</td>
+        </tr>
+      );
+    });
+    const sightingsq = data2.map(name => {
+      console.log(name.NAME);
+      return(
+        <tr >
+          <td>{name.NAME}</td>
+          <td>{name.LOCATION}</td>
+          <td>{name.PERSON}</td>
+          <td>{name.SIGHTED}</td>
         </tr>
       );
     });
@@ -132,6 +167,7 @@ componentWillMount() {
         </Table>
       </Col>
       <Col>
+
         <form onSubmit={this.handleSubmit}>
           <Row>
             <p>update info</p>
@@ -185,6 +221,15 @@ componentWillMount() {
             <input type="submit" value="Submit" />
         </form>
       </Col>
+
+      <Table>
+          <thead>
+            <th>sighted</th>
+          </thead>
+          <tbody><tr>{sightingsq}</tr></tbody>
+        </Table>
+        </Col>
+
     </Row>
   </Container>
     );
