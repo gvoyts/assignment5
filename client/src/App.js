@@ -60,7 +60,7 @@ handleChangeComname(event) {
 }
 
 handleSubmit(event) {
-  alert('A name was submitted: ' + this.state.genus + ' ' + this.state.species + '' + this.state.comname);
+  //alert('A name was submitted: ' + this.state.genus + ' ' + this.state.species + '' + this.state.comname);
   this.updateFlower(this.state.genus, this.state.species, this.state.comname);
   //this.addUser();
   event.preventDefault();
@@ -80,7 +80,7 @@ handleChangeS_date(event) {
 }
 
 handleSubmitSightings(event) {
-  alert('A name was submitted: ' + this.state.s_flower + ' ' + this.state.s_person + '' + this.state.s_location + '' + this.state.s_date);
+  //alert('A name was submitted: ' + this.state.s_flower + ' ' + this.state.s_person + '' + this.state.s_location + '' + this.state.s_date);
   //this.addUser();
   this.insertSighting(this.state.s_flower, this.state.s_person, this.state.s_location, this.state.s_date);
   event.preventDefault();
@@ -94,18 +94,12 @@ callAPI() {
 
 
 getFlowers(){
-  // fetch("http://localhost:8000/flowers") //just changed this from /api/users
-  //       //.then(res => res.text())
-  //       .then(res => this.setState({ flowers: res.data }));
-  // console.log(this.state.flowers);
   axios.get("http://localhost:8000/flowers").then(res => {
       console.log("in axios get call");
       this.setState({
         flowers: res.data
       });
-      console.log(res.data);
-  //onsole.log(JSON.parse("this.state.flowers"));
-  
+      console.log(res.data);  
     });
     }
 
@@ -121,12 +115,9 @@ showSightings(name) {
     console.log(res.data);
     this.setState({
       sightings: res.data
-     // currName: res.data[0].NAME
     });
 
 })
-alert('A name ' + name + ' ' + d);
-
 }
 
 insertSighting(name, person, location, sighted){
@@ -134,7 +125,6 @@ const d = axios.post("http://localhost:8000/insertSightings", { name: name, pers
   console.log(res.data);
 
 })
-//alert('A name ' + name + ' ' + d);
 
 }
 

@@ -141,35 +141,19 @@ app.get("/sightings/:name", (req, res, next) => {
 
 
 app.post("/sightings", (req, res, next) => {
-    // replace Draperia with the input from the user about which flower they want sightings information on
+
     var sql = "select * from sightings s WHERE s.name = $flower ORDER BY s.sighted DESC LIMIT 10" // will eb a problem if not in date order? sort by?
     const flowerName = req.body.flower;
-    //var params = req.body.flower; //[req.body.name]
-     //[req.body.name]
+    
     console.log("req body name: " + req.body.flower);
     console.log("sightings/name has been used");
     flowers.all( sql, {$flower: flowerName}, (err, rows) => {
         console.log("test");
-        //console.log(rows);
         if (rows.length > 0) {
           res.send(rows);
         } else {
           res.send({}); // failed, so return an empty object instead of undefined
         }
-    
-        //rows.forEach((row) => {
-            //console.log(row);
-          //});
-        // if (err) {
-        //   res.status(400).json({"error":err.message});
-        //   return;
-        // }
-        // // res.json({
-        // //     "message":"success",
-        // //     "data":rows
-        // // })
-        // console.log("This is rows : "+ rows);
-        // res.send(rows);
       });
 });
 
@@ -196,21 +180,13 @@ app.post("/insertSightings", (req, res, next) => {
     //var params = [data.name, data.person, data.location, data.sighted];
 
     flowers.all(sql, data, function (err, result) {
-            // if (err){
-            //     res.status(400).json({"error": err.message})
-            //     return;
-            // }
-            // res.json({
-            //     "message": "success",
-            //     "data": data,
-            //     "id" : this.lastID
-            // })
+            
             console.log("inserted sighting: ");
             //console.log(rows);
         });
     });
 
-    // update flowers table, not tested
+    // update flowers table
     app.post("/updateFlowers", (req, res, next) => {
         console.log(req.body);
 
@@ -221,17 +197,14 @@ app.post("/insertSightings", (req, res, next) => {
         console.log("patch received");
         console.log(req.body);
         var errors=[]   
-        // will be set to question marks after to take in user input from front end
-        // needs to be tested 
      
         var data = { 
             $genus: fgenus,
             $species: fspecies,
             $comname: fcomname //req.body.comname
         }
-        console.log('FLOWERA PLSFASDKHGEWJAK');
+        
         var sql = 'UPDATE flowers set genus = $genus, species = $species WHERE comname = $comname';
-        //var params = [data.genus, data.species, data.comname];
 
         flowers.all(sql, data, function (err, result) {
             console.log("updated flower: ");
