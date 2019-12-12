@@ -154,24 +154,36 @@ app.get("/sightings/:name", (req, res, next) => {
 });
 
 
-app.get("/sightings", (req, res, next) => {
+app.post("/sightings", (req, res, next) => {
     // replace Draperia with the input from the user about which flower they want sightings information on
-    var sql = "select * from sightings s WHERE s.name = ? ORDER BY s.sighted DESC LIMIT 10" // will eb a problem if not in date order? sort by?
-    var params = 'Draperia'; //[req.body.name]
+    var sql = "select * from sightings s WHERE s.name = $flower ORDER BY s.sighted DESC LIMIT 10" // will eb a problem if not in date order? sort by?
+    const flowerName = req.body.flower;
+    //var params = req.body.flower; //[req.body.name]
+     //[req.body.name]
+    console.log("req body name: " + req.body.flower);
     console.log("sightings/name has been used");
-    flowers.all(sql, params, (err, rows) => {
-        rows.forEach((row) => {
-            console.log(row);
-          });
-        if (err) {
-          res.status(400).json({"error":err.message});
-          return;
+    flowers.all( sql, {$flower: flowerName}, (err, rows) => {
+        console.log("test");
+        console.log(rows);
+        if (rows.length > 0) {
+          res.send(rows);
+        } else {
+          res.send({}); // failed, so return an empty object instead of undefined
         }
-        // res.json({
-        //     "message":"success",
-        //     "data":rows
-        // })
-        res.send(rows);
+    
+        //rows.forEach((row) => {
+            //console.log(row);
+          //});
+        // if (err) {
+        //   res.status(400).json({"error":err.message});
+        //   return;
+        // }
+        // // res.json({
+        // //     "message":"success",
+        // //     "data":rows
+        // // })
+        // console.log("This is rows : "+ rows);
+        // res.send(rows);
       });
 });
 
