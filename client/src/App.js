@@ -9,6 +9,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Table from "react-bootstrap/Table";
 
 class App extends Component {
   constructor(props) {
@@ -47,18 +51,34 @@ getFlowers(){
 componentWillMount() {
     this.callAPI();
     this.getFlowers();
+    
     //console.log(this.state.flowers);
 }
 //can reference each element by using [] notation on this.state.flowers - maybe use this to make buttons for each entry???
   render(){
-    return (
-  <div className="App">
-    <div class="col-sm-4">
-      <p className="App-intro">{this.state.flowers}</p> 
-    </div>
+    const data = this.state.flowers;
 
-    <div class="col-sm-8">column 2</div>
- </div>
+    const flowersq = data.map(names => {
+      return(
+        <tr>
+          <td>{names}</td>
+        </tr>
+      );
+    });
+    return (
+  <Container>
+    <Row>
+      <Col>
+        <Table>
+          <thead>
+            <th>name</th>
+          </thead>
+          <tbody><tr>{flowersq}</tr></tbody>
+        </Table>
+      </Col>
+      <Col>{this.state.flowers}</Col>
+    </Row>
+  </Container>
     );
   }
 }
