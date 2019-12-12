@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+h3 {font-family: Verdana, Arial, Helvetica, sans-serif;}
+div {text-align: middle; font-family: Lucida Sans Unicode; }
+div.a {
+  font-size: 50px;
+  text-align: middle;
+  color: red;
+}

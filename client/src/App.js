@@ -14,7 +14,6 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -147,12 +146,6 @@ updateFlower(genus, species, comname){
   this.getFlowers();
 }
 
-
-
-
-  
-
-
 //can reference each element by using [] notation on this.state.flowers - maybe use this to make buttons for each entry???
   render(){
     const data = this.state.flowers;
@@ -179,13 +172,16 @@ updateFlower(genus, species, comname){
         </tr>
       );
     });
-    return (
+    return ( 
   <Container>
+    <Col>
+      <div className = "a"> Stop and Smell the Roses </div>
+    </Col>
     <Row>
       <Col>
         <Table>
           <thead>
-            <th>name</th>
+            <th>Genus ____________ Species__________Common Name</th>
           </thead>
           <tbody><tr>{flowersq}</tr></tbody>
         </Table>
@@ -193,18 +189,27 @@ updateFlower(genus, species, comname){
       <Col>
 
         <form onSubmit={this.handleSubmit}>
-          <Row>
-            <p>update info</p>
+          <Row class="w-25 p-3">
+           
+            <p className><b>Update Flower Information </b></p>
+            <p><i>Choose the common name of the flower you wish to edit.</i></p>
+        
             <Col>
               <label>   
+                Common Name: 
                 <select value={this.state.comname} onChange={this.handleChangeComname}>{data.map((x,y) => <option key={y.COMNAME}>{x.COMNAME}</option>)}</select>
+                <p>
+                  ____________________________________________________________________
+                </p>
               </label>
             </Col>
             <Col>
+            <p>
               <label>
                 New genus:
                 <input type="text" name="genus" value={this.state.genus} onChange={this.handleChangeGenus} />
-              </label>
+              </label><p></p>
+              </p>
             </Col>
             <Col>
               <label>
@@ -214,41 +219,55 @@ updateFlower(genus, species, comname){
             </Col>
           </Row>
             <input type="submit" value="Submit" />
+            <p>
+                  ____________________________________________________________________
+                </p>
+                <p>
+                  ____________________________________________________________________
+                </p>
         </form>
         <form onSubmit={this.handleSubmitSightings}>
           <Row>
-            <p>sightings</p>
+            <p><b>Record a new flower sighting</b></p>
+            <p><i>Input the information regarding your sighting.</i></p>
+        
             <Col>
-              <label>   
+              <label>                Common Name of Flower sighted:  
                 <select value={this.state.s_flower} onChange={this.handleChangeS_flower}>{data.map((x,y) => <option key={y.COMNAME}>{x.COMNAME}</option>)}</select>
               </label>
             </Col>
             <Col>
               <label>
-                New person:
+                Flower Discoverer (Name):
                 <input type="text" name="s_person" value={this.state.s_person} onChange={this.handleChangeS_person} />
               </label>
             </Col>
             <Col>
               <label>
-                New loc:
+                Location of flower:
                 <input type="text" name="s_location" value={this.state.s_location} onChange={this.handleChangeS_location} />
               </label>
             </Col>
             <Col>
               <label>
-                New date:
+                Date found:
                 <input type="text" name="s_date" value={this.state.s_date} onChange={this.handleChangeS_date} />
               </label>
             </Col>
           </Row>
             <input type="submit" value="Submit" />
+            <p>
+                  ____________________________________________________________________
+                </p>
+                <p>
+                  ____________________________________________________________________
+                </p>
         </form>
         <Row><Col>
 
 <Table>
     <thead>
-      <th>sighted</th>
+      <th>Ten Most Recent Sightings</th>
     </thead>
     <tbody><tr>{sightingsq}</tr></tbody>
   </Table>

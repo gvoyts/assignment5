@@ -127,25 +127,11 @@ app.delete("/api/user/:id", (req, res, next) => {
 })
 
 app.get("/flowers", (req, res, next) => {
-    flowers.all("select * from flowers", (err, rows) => {
+    flowers.all("select * from flowers ORDER BY flowers.genus", (err, rows) => {
         //console.log(rows);
-        //const allsightings = rows.map(e => e.name);
-        //console.log();
         res.send(rows);
       });
-    // var sql = "select distinct comname as name from flowers"
-    // var params = []
-    // flowers.all(sql, params, (err, rows) => {
-    //     if (err) {
-    //       res.status(400).json({"error":err.message});
-    //       return;
-    //     }
-    //     res.json({
-    //         "message":"success",
-    //         "data":rows
-    //     })
-    //   });
-    //   console.log(res);
+    
 });
 
 app.get("/sightings/:name", (req, res, next) => {
